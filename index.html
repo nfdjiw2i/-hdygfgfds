@@ -1,0 +1,870 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>USURE — Robux Store</title>
+<style>
+:root{--bg:#050505;--card:#0b0b0d;--card2:#101012;--line:#26262b;--text:#f5f5f7;--muted:#85858d}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 50% -15%,#1a1a1d 0,transparent 35%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 0 48%,rgba(255,255,255,.025) 49%,transparent 50%),linear-gradient(295deg,transparent 0 64%,rgba(255,255,255,.018) 65%,transparent 66%)}
+.container{width:min(1120px,calc(100% - 28px));margin:auto}
+header{position:sticky;top:0;z-index:20;background:rgba(5,5,5,.82);backdrop-filter:blur(18px);border-bottom:1px solid #151518}
+.nav{height:70px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:900;letter-spacing:.22em;font-size:19px}
+nav{display:flex;gap:25px}
+nav a{color:#8d8d94;text-decoration:none;font-size:12px}
+nav a:hover{color:#fff}
+
+.hero{text-align:center;padding:72px 0 42px}
+.eyebrow{font-size:10px;letter-spacing:.25em;color:#666;text-transform:uppercase}
+h1{font-size:clamp(42px,8vw,78px);line-height:.92;letter-spacing:-.06em;margin:15px 0 20px}
+.hero p{max-width:650px;margin:auto;color:#888891;font-size:14px;line-height:1.7}
+
+.section{padding:35px 0}
+.title{display:flex;align-items:end;justify-content:space-between;margin-bottom:18px}
+.title h2{margin:0;font-size:27px;letter-spacing:-.03em}
+.title span{color:#5f5f66;font-size:11px}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.step{min-height:145px;padding:21px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#111113,#080809)}
+.num{font-size:10px;color:#5e5e65;letter-spacing:.18em}
+.step h3{font-size:16px;margin:24px 0 8px}
+.step p{font-size:12px;color:#7d7d85;line-height:1.55;margin:0}
+
+.notice{margin-top:12px;padding:13px 15px;border:1px solid #222226;border-radius:11px;background:#09090a;color:#77777f;font-size:11px;line-height:1.55}
+
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.card{position:relative;padding:21px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#101012,#080809);transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:#424249}
+.badge{position:absolute;top:12px;right:12px;font-size:8px;color:#aaa;border:1px solid #303035;border-radius:99px;padding:5px 7px;letter-spacing:.08em}
+.amount{font-size:26px;font-weight:850;letter-spacing:-.04em}
+.amount small{font-size:11px;color:#666}
+.price{color:#888;margin:7px 0 18px;font-size:12px}
+.buy{width:100%;height:42px;border:0;border-radius:9px;background:#f3f3f4;color:#050505;font-weight:800;font-size:12px;cursor:pointer}
+.buy:hover{background:#fff}
+
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.faq div{padding:18px;border:1px solid var(--line);border-radius:13px;background:#0a0a0b}
+.faq h3{font-size:13px;margin:0 0 8px}
+.faq p{font-size:11px;color:#7d7d85;line-height:1.6;margin:0}
+
+footer{padding:45px 0 60px;text-align:center;color:#55555d;font-size:10px}
+
+.modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.8);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:14px}
+.modal.open{display:flex}
+
+.box{width:min(500px,100%);max-height:92vh;overflow:auto;background:#0b0b0d;border:1px solid #303036;border-radius:19px;padding:24px;box-shadow:0 30px 100px #000}
+
+.modalhead{display:flex;justify-content:space-between;align-items:start}
+.modalhead h2{margin:5px 0 0;font-size:23px}
+
+.close{width:35px;height:35px;border-radius:8px;border:1px solid #2b2b30;background:#111113;color:#aaa;font-size:20px;cursor:pointer}
+
+.summary{margin:18px 0;padding:14px;border:1px solid #242428;border-radius:11px;background:#080809}
+.row{display:flex;justify-content:space-between;padding:5px 0;font-size:12px}
+.row span{color:#777}
+
+label{display:block;color:#808088;font-size:10px;text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+
+input{
+width:100%;
+height:45px;
+background:#070708;
+color:#fff;
+border:1px solid #2b2b30;
+border-radius:9px;
+padding:0 12px;
+outline:none
+}
+
+input:focus{border-color:#666}
+
+.primary{
+width:100%;
+height:45px;
+margin-top:15px;
+border:0;
+border-radius:9px;
+background:#f4f4f5;
+color:#050505;
+font-weight:800;
+cursor:pointer
+}
+
+.error{display:none;color:#ff7777;font-size:11px;margin-top:7px}
+
+.pay{display:none}
+.pay.show{display:block}
+
+.after{display:none;text-align:center}
+.after.show{display:block}
+
+.paynote{
+margin-top:13px;
+padding:13px;
+border:1px solid #25252a;
+border-radius:10px;
+color:#777;
+font-size:11px;
+line-height:1.55
+}
+
+.discord{
+margin-top:17px;
+padding:16px;
+border:1px solid #303036;
+border-radius:11px;
+background:#080809
+}
+
+.discord strong{
+display:block;
+font-size:17px;
+margin:7px 0 12px
+}
+
+.copy{
+height:36px;
+padding:0 13px;
+border:1px solid #35353b;
+background:#111113;
+color:#fff;
+border-radius:8px;
+cursor:pointer
+}
+
+@media(max-width:850px){
+.steps{grid-template-columns:1fr 1fr}
+.products{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:550px){
+nav{display:none}
+.steps,.products,.faq{grid-template-columns:1fr}
+.hero{padding-top:50px}
+.container{width:min(100% - 20px,1120px)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container nav">
+<div class="logo">USURE</div>
+
+<nav>
+<a href="#how">Как работает</a>
+<a href="#shop">Пакеты</a>
+<a href="#faq">FAQ</a>
+</nav>
+
+</div>
+</header>
+
+<main>
+
+<section class="hero container">
+
+<div class="eyebrow">USURE / ROBUX STORE</div>
+
+<h1>ROBux<br>без лишнего.</h1>
+
+<p>
+Выберите пакет, укажите Roblox username,
+оплатите заказ и отправьте скриншот оплаты
+в Discord для проверки.
+</p>
+
+</section>
+
+
+<section id="how" class="section container">
+
+<div class="title">
+<h2>Как это работает</h2>
+<span>4 шага</span>
+</div>
+
+<div class="steps">
+
+<div class="step">
+<div class="num">01</div>
+<h3>Выберите заказ</h3>
+<p>
+Выберите нужное количество Robux
+и нажмите «Купить».
+</p>
+</div>
+
+<div class="step">
+<div class="num">02</div>
+<h3>Введите ник</h3>
+<p>
+Укажите точный Roblox username
+аккаунта получателя.
+</p>
+</div>
+
+<div class="step">
+<div class="num">03</div>
+<h3>Оплатите</h3>
+<p>
+Перейдите по ссылке YooMoney
+и оплатите указанную сумму.
+</p>
+</div>
+
+<div class="step">
+<div class="num">04</div>
+<h3>Отправьте скриншот</h3>
+<p>
+Отправьте подтверждение оплаты
+в Discord: tswender_52440.
+</p>
+</div>
+
+</div>
+
+<div class="notice">
+Перед оплатой внимательно проверьте Roblox username.
+После оплаты сохраните скриншот подтверждения.
+</div>
+
+</section>
+
+
+<section id="shop" class="section container">
+
+<div class="title">
+<h2>Пакеты Robux</h2>
+<span>0.60 ₽ / Robux</span>
+</div>
+
+<div class="products" id="products"></div>
+
+</section>
+
+
+<section id="faq" class="section container">
+
+<div class="title">
+<h2>FAQ</h2>
+</div>
+
+<div class="faq">
+
+<div>
+<h3>Какой ник вводить?</h3>
+<p>
+Именно Roblox username, а не Display Name.
+</p>
+</div>
+
+<div>
+<h3>Что делать после оплаты?</h3>
+<p>
+Сделайте скриншот подтверждения платежа
+и отправьте его в Discord tswender_52440.
+</p>
+</div>
+
+<div>
+<h3>Когда выполняется заказ?</h3>
+<p>
+После проверки платежа и получения скриншота
+заказ обрабатывается вручную.
+</p>
+</div>
+
+<div>
+<h3>Можно ли выбрать другой пакет?</h3>
+<p>
+Да. Закройте окно и выберите другой пакет
+перед оплатой.
+</p>
+</div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<footer>
+USURE — ROBUX STORE
+</footer>
+
+
+<div class="modal" id="modal">
+
+<div class="box">
+
+<div class="modalhead">
+
+<div>
+<div class="eyebrow">ORDER</div>
+<h2 id="modalTitle">Оформление заказа</h2>
+</div>
+
+<button class="close" id="close">×</button>
+
+</div>
+
+
+<div id="formStage">
+
+<div class="summary">
+
+<div class="row">
+<span>Пакет</span>
+<b id="sRobux">—</b>
+</div>
+
+<div class="row">
+<span>Стоимость</span>
+<b id="sPrice">—</b>
+</div>
+
+</div>
+
+
+<label for="username">
+Roblox username
+</label>
+
+<input
+id="username"
+maxlength="32"
+placeholder="Введите Roblox username"
+autocomplete="off"
+>
+
+<div class="error" id="error">
+Введите Roblox username.
+</div>
+
+<button class="primary" id="next">
+Далее — к оплате
+</button>
+
+</div>
+
+
+<div class="pay" id="payStage">
+
+<div class="summary">
+
+<div class="row">
+<span>Roblox username</span>
+<b id="pNick">—</b>
+</div>
+
+<div class="row">
+<span>Пакет</span>
+<b id="pRobux">—</b>
+</div>
+
+<div class="row">
+<span>Стоимость</span>
+<b id="pPrice">—</b>
+</div>
+
+</div>
+
+<button class="primary" id="paymentButton">
+Перейти к оплате
+</button>
+
+<div class="paynote">
+После оплаты вернитесь на эту страницу
+и нажмите «Я оплатил».
+</div>
+
+<button class="primary" id="paid">
+Я оплатил — показать инструкцию
+</button>
+
+</div>
+
+
+<div class="after" id="afterStage">
+
+<h2>Оплата отправлена</h2>
+
+<p style="color:#85858d;font-size:12px;line-height:1.6">
+Сделайте скриншот подтверждения оплаты
+и отправьте его в Discord вместе
+с Roblox username.
+</p>
+
+<div class="discord">
+
+<span style="color:#666;font-size:10px;letter-spacing:.1em">
+DISCORD
+</span>
+
+<strong>
+tswender_52440
+</strong>
+
+<button class="copy" id="copy">
+Скопировать
+</button>
+
+</div>
+
+<p style="color:#606068;font-size:10px;margin-top:15px">
+Roblox username:
+<b id="finalNick">—</b>
+<br>
+Заказ:
+<b id="finalOrder">—</b>
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+const DISCORD = "tswender_52440";
+
+
+/*
+============================================================
+YooMoney
+
+Сюда вставляются ПОЛНЫЕ прямые ссылки YooMoney.
+
+Пример:
+
+1000: "https://yoomoney.ru/bill/pay/1KMAR82HK4K.261003"
+
+Важно:
+каждый пакет должен иметь свою ссылку на соответствующий
+платёж/счёт.
+
+Не добавляй к этим ссылкам вручную label/comment.
+Сайт открывает ссылку YooMoney как есть.
+============================================================
+*/
+
+const PAYMENT_URLS = {
+
+200: "",
+
+300: "",
+
+400: "",
+
+500: "",
+
+600: "",
+
+700: "",
+
+800: "",
+
+900: "",
+
+1000: "",
+
+1500: "",
+
+2000: "",
+
+3000: "",
+
+5000: "",
+
+10000: ""
+
+};
+
+
+const PACKAGES = [
+
+{
+robux:200,
+price:120
+},
+
+{
+robux:300,
+price:180
+},
+
+{
+robux:400,
+price:240
+},
+
+{
+robux:500,
+price:300
+},
+
+{
+robux:600,
+price:360
+},
+
+{
+robux:700,
+price:420
+},
+
+{
+robux:800,
+price:480
+},
+
+{
+robux:900,
+price:540
+},
+
+{
+robux:1000,
+price:600,
+badge:"ПОПУЛЯРНЫЙ"
+},
+
+{
+robux:1500,
+price:900
+},
+
+{
+robux:2000,
+price:1200
+},
+
+{
+robux:3000,
+price:1800
+},
+
+{
+robux:5000,
+price:3000
+},
+
+{
+robux:10000,
+price:6000
+}
+
+];
+
+
+const products =
+document.getElementById("products");
+
+const modal =
+document.getElementById("modal");
+
+const formStage =
+document.getElementById("formStage");
+
+const payStage =
+document.getElementById("payStage");
+
+const afterStage =
+document.getElementById("afterStage");
+
+const username =
+document.getElementById("username");
+
+const error =
+document.getElementById("error");
+
+
+let selected = null;
+
+
+function money(n){
+
+return new Intl.NumberFormat("ru-RU")
+.format(n) + " ₽";
+
+}
+
+
+function render(){
+
+products.innerHTML =
+PACKAGES.map((p,i)=>`
+
+<article class="card">
+
+${p.badge
+? `<div class="badge">${p.badge}</div>`
+: ""}
+
+<div class="amount">
+
+${p.robux.toLocaleString("ru-RU")}
+
+<small>
+R$
+</small>
+
+</div>
+
+<div class="price">
+${money(p.price)}
+</div>
+
+<button
+class="buy"
+data-i="${i}"
+>
+Купить
+</button>
+
+</article>
+
+`).join("");
+
+}
+
+
+function openOrder(p){
+
+selected = p;
+
+document.getElementById("sRobux")
+.textContent =
+p.robux.toLocaleString("ru-RU")
++ " Robux";
+
+document.getElementById("sPrice")
+.textContent =
+money(p.price);
+
+username.value = "";
+
+error.style.display = "none";
+
+formStage.style.display = "block";
+
+payStage.classList.remove("show");
+
+afterStage.classList.remove("show");
+
+document.getElementById("modalTitle")
+.textContent =
+"Оформление заказа";
+
+modal.classList.add("open");
+
+setTimeout(
+()=>username.focus(),
+100
+);
+
+}
+
+
+products.addEventListener(
+"click",
+e=>{
+
+const button =
+e.target.closest(".buy");
+
+if(!button) return;
+
+openOrder(
+PACKAGES[
+Number(button.dataset.i)
+]
+);
+
+}
+);
+
+
+document.getElementById("close")
+.onclick =
+()=>modal.classList.remove("open");
+
+
+modal.addEventListener(
+"click",
+e=>{
+
+if(e.target === modal){
+
+modal.classList.remove("open");
+
+}
+
+}
+);
+
+
+document.addEventListener(
+"keydown",
+e=>{
+
+if(e.key === "Escape"){
+
+modal.classList.remove("open");
+
+}
+
+}
+);
+
+
+document.getElementById("next")
+.onclick = ()=>{
+
+const nick =
+username.value.trim();
+
+if(nick.length < 2){
+
+error.style.display =
+"block";
+
+return;
+
+}
+
+selected.nick = nick;
+
+selected.order =
+"USURE-" +
+Date.now()
+.toString(36)
+.toUpperCase();
+
+
+document.getElementById("pNick")
+.textContent =
+nick;
+
+
+document.getElementById("pRobux")
+.textContent =
+selected.robux
+.toLocaleString("ru-RU")
++ " Robux";
+
+
+document.getElementById("pPrice")
+.textContent =
+money(selected.price);
+
+
+formStage.style.display =
+"none";
+
+payStage.classList.add("show");
+
+};
+
+
+document.getElementById("paymentButton")
+.onclick = ()=>{
+
+const url =
+PAYMENT_URLS[selected.robux];
+
+if(!url){
+
+alert(
+"Для этого пакета ещё не добавлена ссылка YooMoney."
+);
+
+return;
+
+}
+
+window.open(
+url,
+"_blank",
+"noopener,noreferrer"
+);
+
+};
+
+
+document.getElementById("paid")
+.onclick = ()=>{
+
+document.getElementById("finalNick")
+.textContent =
+selected.nick;
+
+document.getElementById("finalOrder")
+.textContent =
+selected.order;
+
+payStage.classList.remove("show");
+
+afterStage.classList.add("show");
+
+document.getElementById("modalTitle")
+.textContent =
+"Следующий шаг";
+
+};
+
+
+document.getElementById("copy")
+.onclick = async ()=>{
+
+try{
+
+await navigator.clipboard.writeText(DISCORD);
+
+document.getElementById("copy")
+.textContent =
+"Скопировано";
+
+setTimeout(
+()=>{
+document.getElementById("copy")
+.textContent =
+"Скопировать";
+},
+1500
+);
+
+}catch{
+
+alert(
+"Discord: " + DISCORD
+);
+
+}
+
+};
+
+
+username.addEventListener(
+"input",
+()=>{
+error.style.display = "none";
+}
+);
+
+
+render();
+
+</script>
+
+</body>
+</html>
